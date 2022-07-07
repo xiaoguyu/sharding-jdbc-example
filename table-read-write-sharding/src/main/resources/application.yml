@@ -1,0 +1,46 @@
+server:
+  port: 8082
+
+spring:
+  shardingsphere:
+    datasource: # 数据源配置
+      names: ds-master,ds-slave # 数据源名称
+      ds-master:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://localhost:3306/sharding_db1?characterEncoding=utf-8
+        username: root
+        password: 123456
+      ds-slave:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://localhost:3306/sharding_db1_slave?characterEncoding=utf-8
+        username: root
+        password: 123456
+    rules:
+      readwrite-splitting: # 读写分离配置
+        data-sources:
+          ds-order: # 读写分离逻辑数据源名称
+            type: Static # 读写分离类型
+            load-balancer-name: round_robin # 负载均衡算法名称（这里填的是下面负载均衡算法名称，不是类型）
+            props:
+              write-data-source-name: ds-master # 写库数据源名称
+              read-data-source-names: ds-slave # 读库数据源名称，多个从数据源用逗号分隔
+        load-balancers: # 负载均衡算法配置
+          round_robin: # 负载均衡算法名称
+            type: ROUND_ROBIN # 负载均衡算法类型
+      sharding: # 分片配置
+        tables:
+          tb_order: # 逻辑表名称
+            actual-data-nodes: ds-order.tb_order_$->{0..3} # 由数据源名 + 表名组成（参考 Inline 语法规则）
+            table-strategy:
+              standard:
+                sharding-column: id
+                sharding-algorithm-name: t-order-inline
+        sharding-algorithms: # 分片算法配置
+          t-order-inline:
+            type: INLINE
+            props:
+              algorithm-expression: tb_order_$->{id % 4}
+    props:
+      sql-show: true # 打印sql

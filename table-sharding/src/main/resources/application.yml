@@ -1,0 +1,29 @@
+server:
+  port: 8082
+
+spring:
+  shardingsphere:
+    datasource: # 数据源配置
+      names: master # 数据源名称
+      master:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://localhost:3306/sharding_db1?characterEncoding=utf-8
+        username: root
+        password: 123456
+    rules:
+      sharding: # 分片配置
+        tables:
+          tb_order: # 逻辑表名称
+            actual-data-nodes: master.tb_order_$->{0..3} # 由数据源名 + 表名组成（参考 Inline 语法规则）
+            table-strategy:
+              standard:
+                sharding-column: id
+                sharding-algorithm-name: t-order-inline
+        sharding-algorithms: # 分片算法配置
+          t-order-inline:
+            type: INLINE
+            props:
+              algorithm-expression: tb_order_$->{id % 4}
+    props:
+      sql-show: true # 打印sql

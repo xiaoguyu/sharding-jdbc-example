@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <!--maven的父工程packaging标签的值必须为pom-->
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>db-read-write-sharding</module>
+        <module>db-sharding</module>
+        <module>db-table-read-write-sharding</module>
+        <module>db-table-sharding</module>
+        <module>read-write</module>
+        <module>table-read-write-sharding</module>
+        <module>table-sharding</module>
+    </modules>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.5.8</version>
+        <relativePath/>
+    </parent>
+
+    <groupId>com.javaedit</groupId>
+    <artifactId>sharding-jdbc-example</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <properties>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+        <mybatisplus.version>3.5.1</mybatisplus.version>
+        <druid.version>1.2.8</druid.version>
+        <shardingsphere.version>5.1.2</shardingsphere.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- mybatis plus -->
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-boot-starter</artifactId>
+                <version>${mybatisplus.version}</version>
+            </dependency>
+            <!-- 这里要用druid而不是druid-spring-boot-starter -->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid</artifactId>
+                <version>${druid.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>8.0.25</version>
+            </dependency>
+            <!-- sharding-jdbc -->
+            <dependency>
+                <groupId>org.apache.shardingsphere</groupId>
+                <artifactId>shardingsphere-jdbc-core-spring-boot-starter</artifactId>
+                <version>${shardingsphere.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+</project>
