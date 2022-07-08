@@ -1,0 +1,55 @@
+server:
+  port: 8083
+
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+        username: nacos
+        password: nacos
+  application:
+    name: storage-service
+  shardingsphere:
+    datasource: # 数据源配置
+      names: ds1
+      ds1:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://localhost:3306/sharding_db2?characterEncoding=utf-8
+        username: root
+        password: root
+    rules:
+      sharding: # 分片配置
+        tables:
+          tb_storage: # 逻辑表名称
+            actual-data-nodes: ds1.tb_storage
+    props:
+      sql-show: true # 打印sql
+# seata配置
+seata:
+  enabled: true
+  application-id: ${spring.application.name}
+  tx-service-group: ${spring.application.name}-tx-group
+  # 配置中心
+  config:
+    type: nacos
+    nacos:
+      serverAddr: localhost
+      dataId: "seata.properties"
+      username: nacos
+      password: nacos
+  # 注册中心（就是提供服务发现功能）
+  registry:
+    type: nacos
+    nacos:
+      application: seata-server
+      server-addr: localhost
+      username: nacos
+      password: nacos
+  use-jdk-proxy: true
+logging:
+  level:
+    io:
+      seata: info
+

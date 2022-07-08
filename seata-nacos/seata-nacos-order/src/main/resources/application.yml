@@ -1,0 +1,62 @@
+server:
+  port: 8082
+
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+        username: nacos
+        password: nacos
+  application:
+    name: order-service
+  shardingsphere:
+    datasource: # 数据源配置
+      names: ds0
+      ds0:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://localhost:3306/sharding_db1?characterEncoding=utf-8
+        username: root
+        password: root
+    rules:
+      sharding: # 分片配置
+        tables:
+          tb_order: # 逻辑表名称
+            actual-data-nodes: ds0.tb_order # 由数据源名 + 表名组成（参考 Inline 语法规则）
+            key-generate-strategy: # 主键生成策略
+              column: id # 分布式序列列名称
+              key-generator-name: snow # 分布式序列算法名称
+        key-generators: # 分布式序列策略配置
+          snow:
+            type: SNOWFLAKE
+    props:
+      sql-show: true # 打印sql
+# seata配置
+seata:
+  enabled: true
+  application-id: ${spring.application.name}
+  tx-service-group: ${spring.application.name}-tx-group
+  # 配置中心
+  config:
+    type: nacos
+    nacos:
+      serverAddr: localhost
+      dataId: "seata.properties"
+      username: nacos
+      password: nacos
+  # 注册中心（就是提供服务发现功能）
+  registry:
+    type: nacos
+    nacos:
+      application: seata-server
+      server-addr: localhost
+      username: nacos
+      password: nacos
+  # seata默认使用cglib代理，整合sharding-jdbc会爆错，提示ShardingSphereDataSource无法序列化，有知道怎么解决的朋友，诚心希望告知下
+  use-jdk-proxy: true
+logging:
+  level:
+    io:
+      seata: info
+
