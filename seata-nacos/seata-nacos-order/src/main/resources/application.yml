@@ -41,7 +41,7 @@ seata:
   config:
     type: nacos
     nacos:
-      serverAddr: localhost
+      serverAddr: localhost:8848
       dataId: "seata.properties"
       username: nacos
       password: nacos
@@ -50,7 +50,7 @@ seata:
     type: nacos
     nacos:
       application: seata-server
-      server-addr: localhost
+      server-addr: localhost:8848
       username: nacos
       password: nacos
   # seata默认使用cglib代理，整合sharding-jdbc会爆错，提示ShardingSphereDataSource无法序列化，有知道怎么解决的朋友，诚心希望告知下

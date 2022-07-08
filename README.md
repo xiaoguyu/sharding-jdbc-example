@@ -47,6 +47,12 @@ springboot + mybatis-plus + sharding-jdbc
 
   分库分表 + 读写分离
 
+- seata-nacos
+
+  Sharding-jdbc + Seata + Nacos整合
+
+  搭配[博客](https://www.javaedit.com/archives/128/)食用更佳
+
 ## 参考资料
 
 [ShardingSphere5.1.2文档](https://shardingsphere.apache.org/document/5.1.2/cn/overview/)

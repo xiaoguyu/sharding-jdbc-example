@@ -35,7 +35,7 @@ seata:
   config:
     type: nacos
     nacos:
-      serverAddr: localhost
+      serverAddr: localhost:8848
       dataId: "seata.properties"
       username: nacos
       password: nacos
@@ -44,7 +44,7 @@ seata:
     type: nacos
     nacos:
       application: seata-server
-      server-addr: localhost
+      server-addr: localhost:8848
       username: nacos
       password: nacos
   use-jdk-proxy: true
