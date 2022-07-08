@@ -9,6 +9,10 @@ springboot + mybatis-plus + sharding-jdbc
    现在时间是2022年7月6日，官方最高版本是5.1.2，但是master和5.1.2版本的文档内容不一致，切记。
 2. springboot的配置，要看官方文档SpringBootStarter部分，不要看YAML配置部分，两者不是一码事。
 
+## 快速启动
+
+相关sql文件在resource目录，配置好数据库，启动application即可，请求接口在controller中
+
 ## 模块说明
 
 - read-write
